@@ -1,35 +1,17 @@
-import { useState } from 'react'
-import { Button } from './Button';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+import { Button } from './components/Button';
+import { Home } from './pages/Home';
+import { NewRoom } from './pages/NewRoom';
 
 export default function App() {
-  const [count, setCount] = useState(0)
-
-  function handleCount(){
-    setCount(count + 1);
-  }
-
+  
   return (
-    <>
-      <Button 
-        count={count}
-        text="Click aqui"
-        handleCount={handleCount}
-      />
-      <Button 
-        count={count}
-        text="Click aqui 2"
-        handleCount={handleCount}
-      />
-      <Button 
-        count={count}
-        text="Click aqui 3"
-        handleCount={handleCount}
-      />
-      <Button 
-        count={count}
-        text="Click aqui 4"
-        handleCount={handleCount}
-      />
-    </>
+    <BrowserRouter>
+      <Routes >
+        <Route path="/" Component={Home} />
+        <Route path="/rooms/new" Component={ NewRoom}/>
+      </Routes>
+    </BrowserRouter>
   )
 }
