@@ -1,35 +1,17 @@
-import { useState } from 'react'
-import { Button } from './Button';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Home } from './pages/Home';
+import { NewRoom } from './pages/NewRoom';
+import { AuthContextProvider } from './contexts/AuthContext';
 
-export default function App() {
-  const [count, setCount] = useState(0)
-
-  function handleCount(){
-    setCount(count + 1);
-  }
-
+export default function App() {  
   return (
-    <>
-      <Button 
-        count={count}
-        text="Click aqui"
-        handleCount={handleCount}
-      />
-      <Button 
-        count={count}
-        text="Click aqui 2"
-        handleCount={handleCount}
-      />
-      <Button 
-        count={count}
-        text="Click aqui 3"
-        handleCount={handleCount}
-      />
-      <Button 
-        count={count}
-        text="Click aqui 4"
-        handleCount={handleCount}
-      />
-    </>
+    <BrowserRouter>
+      <AuthContextProvider>
+        <Routes >
+          <Route path="/" Component={Home} />
+          <Route path="/rooms/new" Component={ NewRoom}/>
+        </Routes>
+      </AuthContextProvider> 
+    </BrowserRouter>
   )
 }
