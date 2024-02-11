@@ -2,42 +2,22 @@ import { useNavigate } from "react-router-dom";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../services/firebase";
 
+
 import ilustration from "../assets/images/illustration.svg";
 import logoImg from "../assets/images/logo.svg";
 import googleIcon from "../assets/images/google-icon.svg";
 import { Button } from "../components/Button";
 import "../styles/auth.scss";
+import { useAuth } from "../hooks/useAuth";
 
 export function Home(){
     const navigate = useNavigate();
+    const { user, signInWithGoogle } = useAuth();
 
-    function singIn(){
-
-    }
-
-    function handleCreateRoom(){
-        const provider = new GoogleAuthProvider();
-
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                const credential = GoogleAuthProvider.credentialFromResult(result)!;
-                const token = credential.accessToken;
-                // The signed-in user info.
-                const user = result.user;
-                // IdP data available using getAdditionalUserInfo(result)
-                // ...
-            })
-            .catch((error) => {
-                // Handle Errors here.
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // The email of the user's account used.
-                const email = error.customData.email;
-                // The AuthCredential type that was used.
-                const credential = GoogleAuthProvider.credentialFromError(error);
-                // ...
-            });
+    async function handleCreateRoom(){
+        if(!user){
+            await signInWithGoogle();
+        }
 
         navigate("/rooms/new");
     }

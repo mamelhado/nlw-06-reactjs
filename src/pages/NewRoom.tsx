@@ -5,8 +5,12 @@ import logoImg from "../assets/images/logo.svg";
 import googleIcon from "../assets/images/google-icon.svg";
 import { Button } from "../components/Button";
 import "../styles/auth.scss";
+import { useAuth } from "../hooks/useAuth";
 
 export function NewRoom(){
+
+    const { user, signInWithGoogle } = useAuth();
+
     return(
         <div id="page-auth">
             <aside>
