@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { FormEvent, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import ilustration from "../assets/images/illustration.svg";
 import logoImg from "../assets/images/logo.svg";
@@ -6,10 +7,34 @@ import googleIcon from "../assets/images/google-icon.svg";
 import { Button } from "../components/Button";
 import "../styles/auth.scss";
 import { useAuth } from "../hooks/useAuth";
+import { database } from "../services/firebase";
+import { child, get, getDatabase, ref, set } from "firebase/database";
 
 export function NewRoom(){
+    const navigate = useNavigate();
+    const [newRoom, setNewRoom ] = useState("");
 
     const { user, signInWithGoogle } = useAuth();
+
+    async function handleCreateRoom(event : FormEvent<HTMLFormElement>){
+        event.preventDefault();
+        if(newRoom.trim() == ""){
+            return;
+        }
+
+        const roomRef = ref(database, "rooms")
+        console.log("roomRef",roomRef);
+
+        const newHashIdRoom = crypto.randomUUID();
+
+        await set(child(roomRef,newHashIdRoom), {
+            title: newRoom,
+            authorId: user?.id
+        })
+       
+
+        navigate(`/rooms/${newHashIdRoom}`);
+    }
 
     return(
         <div id="page-auth">
@@ -24,10 +49,14 @@ export function NewRoom(){
                     <h2>
                         Criar uma nova sala
                     </h2>
-                    <form>
+                    <form 
+                        onSubmit={handleCreateRoom}
+                    >
                         <input 
                             type="text"
                             placeholder="Nome da sala"
+                            onChange={event => setNewRoom(event?.target.value)}
+                            value={newRoom}
                         />
                         <Button type="submit">Criar sala</Button>
                     </form>

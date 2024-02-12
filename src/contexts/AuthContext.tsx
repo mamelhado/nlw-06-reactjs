@@ -15,7 +15,6 @@ type User = {
 
 type AuthContextProviderProps={
     children: ReactNode;
-
 }
 
 export const AuthContext = createContext({} as AuthContextType);
