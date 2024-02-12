@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from "../services/firebase";
+import { database } from "../services/firebase";
 
 
 import ilustration from "../assets/images/illustration.svg";
@@ -9,10 +9,14 @@ import googleIcon from "../assets/images/google-icon.svg";
 import { Button } from "../components/Button";
 import "../styles/auth.scss";
 import { useAuth } from "../hooks/useAuth";
+import { FormEvent, useState } from "react";
+import { get, ref } from "firebase/database";
 
 export function Home(){
     const navigate = useNavigate();
     const { user, signInWithGoogle } = useAuth();
+
+    const [roomCode, setRoomCode ] = useState("");
 
     async function handleCreateRoom(){
         if(!user){
@@ -20,6 +24,26 @@ export function Home(){
         }
 
         navigate("/rooms/new");
+    }
+
+    async function handleJoinRoom(event: FormEvent<HTMLFormElement>){
+        event.preventDefault();
+
+        if(roomCode.trim() == "")
+        {
+            return;
+        }
+
+        const roomRef = ref(database,`rooms/${roomCode}`);
+
+        const roomData = await get(roomRef);
+
+        if(!roomData.exists()){
+            alert("Room does not exists");
+            return;
+        }
+
+        navigate(`/rooms/${roomCode}`);
     }
 
     return(
@@ -45,10 +69,14 @@ export function Home(){
                     <div className="separator">
                         ou entre em uma sala
                     </div>
-                    <form>
+                    <form
+                        onSubmit={handleJoinRoom}
+                    >
                         <input 
                             type="text"
                             placeholder="Digite o codigo da sala"
+                            onChange={event => setRoomCode(event.target.value)}
+                            value={roomCode}
                         />
                         <Button type="submit">Entrar na sala</Button>
                     </form>
