@@ -1,14 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { database } from "../services/firebase";
+import { database } from "../../services/firebase";
 
-
-import ilustration from "../assets/images/illustration.svg";
-import logoImg from "../assets/images/logo.svg";
-import googleIcon from "../assets/images/google-icon.svg";
-import { Button } from "../components/Button";
-import "../styles/auth.scss";
-import { useAuth } from "../hooks/useAuth";
+import ilustration from "../../assets/images/illustration.svg";
+import logoImg from "../../assets/images/logo.svg";
+import googleIcon from "../../assets/images/google-icon.svg";
+import { Button } from "../../components/Button";
+import "../../styles/auth.scss";
+import { useAuth } from "../../hooks/useAuth";
 import { FormEvent, useState } from "react";
 import { get, ref } from "firebase/database";
 
@@ -38,8 +36,15 @@ export function Home(){
 
         const roomData = await get(roomRef);
 
+        console.log("roomData", roomData.val());
+
         if(!roomData.exists()){
             alert("Room does not exists");
+            return;
+        }
+
+        if(roomData.val().endedAt){
+            alert("Room already closed!");
             return;
         }
 

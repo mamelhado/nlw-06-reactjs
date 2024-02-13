@@ -1,14 +1,13 @@
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import ilustration from "../assets/images/illustration.svg";
-import logoImg from "../assets/images/logo.svg";
-import googleIcon from "../assets/images/google-icon.svg";
-import { Button } from "../components/Button";
-import "../styles/auth.scss";
-import { useAuth } from "../hooks/useAuth";
-import { database } from "../services/firebase";
-import { child, get, getDatabase, ref, set } from "firebase/database";
+import ilustration from "../../assets/images/illustration.svg";
+import logoImg from "../../assets/images/logo.svg";
+import { Button } from "../../components/Button";
+import "../../styles/auth.scss";
+import { useAuth } from "../../hooks/useAuth";
+import { database } from "../../services/firebase";
+import { child, ref, set } from "firebase/database";
 
 export function NewRoom(){
     const navigate = useNavigate();
@@ -22,8 +21,7 @@ export function NewRoom(){
             return;
         }
 
-        const roomRef = ref(database, "rooms")
-        console.log("roomRef",roomRef);
+        const roomRef = ref(database, "rooms");
 
         const newHashIdRoom = crypto.randomUUID();
 
