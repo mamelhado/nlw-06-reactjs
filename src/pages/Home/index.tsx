@@ -36,8 +36,6 @@ export function Home(){
 
         const roomData = await get(roomRef);
 
-        console.log("roomData", roomData.val());
-
         if(!roomData.exists()){
             alert("Room does not exists");
             return;
